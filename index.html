@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Monthly Shift Scheduler</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .container {
+      display: flex;
+      gap: 20px;
+    }
+    .form-section, .shift-list-section {
+      flex: 1;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, button {
+      margin-top: 5px;
+      width: 100%;
+      padding: 5px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      background: #f0f0f0;
+      margin: 5px 0;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Monthly Shift Scheduler</h1>
+  <div class="container">
+    <div class="form-section">
+      <label for="day">Day:</label>
+      <input type="text" id="day">
+
+      <label for="startTime">Start Time (e.g. 08:00):</label>
+      <input type="text" id="startTime">
+
+      <label for="endTime">End Time (e.g. 14:00):</label>
+      <input type="text" id="endTime">
+
+      <label for="employee">Assign to (optional):</label>
+      <select id="employee">
+        <option value="">-- Select Employee --</option>
+        <option value="Alice">Alice</option>
+        <option value="Bob">Bob</option>
+        <option value="Charlie">Charlie</option>
+      </select>
+
+      <label><input type="checkbox" id="lockShift"> Lock this shift</label>
+
+      <button onclick="addShift()">Add Shift</button>
+    </div>
+
+    <div class="shift-list-section">
+      <h3>Shifts</h3>
+      <ul id="shiftList"></ul>
+    </div>
+  </div>
+
+  <script>
+    function addShift() {
+      const day = document.getElementById('day').value;
+      const start = document.getElementById('startTime').value;
+      const end = document.getElementById('endTime').value;
+      const employee = document.getElementById('employee').value;
+      const isLocked = document.getElementById('lockShift').checked;
+
+      if (!day || !start || !end) {
+        alert("Please fill in all shift fields.");
+        return;
+      }
+
+      let shiftText = `${day}: ${start} - ${end}`;
+      if (isLocked && employee) {
+        shiftText += ` [LOCKED to ${employee}]`;
+      } else if (employee) {
+        shiftText += ` [Assigned to ${employee}]`;
+      } else if (isLocked) {
+        shiftText += ` [LOCKED]`;
+      }
+
+      const li = document.createElement('li');
+      li.textContent = shiftText;
+      document.getElementById('shiftList').appendChild(li);
+
+      // Reset form
+      document.getElementById('day').value = '';
+      document.getElementById('startTime').value = '';
+      document.getElementById('endTime').value = '';
+      document.getElementById('employee').value = '';
+      document.getElementById('lockShift').checked = false;
+    }
+  </script>
+</body>
+</html>
